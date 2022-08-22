@@ -12,7 +12,6 @@ common_y = 702
 common_time = 1
 skill_x = 1180
 skill_y = 697
-
 def random_click(target_x,target_y,time):                          #매크로 의심을 피하기 위한 랜덤위치 터치
     sleep(int(time))
     rand_x = random.randint((target_x-10),(target_x+10))
@@ -20,6 +19,17 @@ def random_click(target_x,target_y,time):                          #매크로 �
     touch = "input touchscreen tap " + str(rand_x) + " " + str(rand_y)
     adbdevice.shell(touch)
 
+def input_swipe(x,y,xx,yy):
+    touch = "input touchscreen swipe " + str(223) + " " + str(728) + " " + str(234) + " " + str(185)
+    adbdevice.shell(touch)
+def combo1():
+    for i in range(4):
+        random_click(common_x, common_y, common_time)
+    check_monster()
+def combo2():
+    for i in range(4):
+        random_click(common_x,common_y,common_time)
+    check_monster()
 def combo3():
     random_click(skill_x,skill_y,0)
     random_click(skill_x,skill_y,0)
@@ -34,17 +44,32 @@ def combo4():
     random_click(common_x,common_y,common_time)
     random_click(common_x,common_y,common_time)
     random_click(common_x,common_y,common_time)
+    check_monster()
+def avoid():
+    for i in range(3):
+        input_swipe(223,727,364,727)
 def check_monster():
     sleep(0.1)
     save_img = pyautogui.screenshot()
+    coyote_img1 = pyautogui.locate("coyotelv1.png",save_img,confidence=0.8)
+    coyote_img2 = pyautogui.locate("coyotelv2.png",save_img,confidence=0.8)
     bear_img3 = pyautogui.locate("bearlv3.png",save_img,confidence=0.8)
     bear_img4 = pyautogui.locate("bearlv4.png",save_img,confidence=0.8)
-    if bear_img3 is not None:
+    dont_att = pyautogui.locate("don't attack.png",save_img,confidence=0.8)
+    if coyote_img1 is not None:
+        combo1()
+
+    elif coyote_img2 is not None:
+        combo2()
+
+    elif bear_img3 is not None:
         combo3()
 
     elif bear_img4 is not None:
         combo4()
 
+    elif dont_att is not None:
+        avoid()
 
 #adb 설정
 client = AdbClient(host="127.0.0.1", port=5037)
@@ -62,11 +87,13 @@ else:
 while True:
     end = int(input("프로그램 계속 진행\n1.진행 \n2.종료"))
     if end==1:
-        random_click(target_x, target_y, 0)
-        check_monster()
+        for j in range(30):
+            for i in range(10):
+                input_swipe(223,728,234,185)
+            random_click(target_x, target_y, 0)
+            check_monster()
     elif end==2:
         exit(0)
-
     else :
         print("재입력 필요")
 
