@@ -4,7 +4,15 @@ from time import sleep
 import random
 import pyautogui
 #ld player adb 0 = 5555 1 =5557 2 =5559
-deviceport = 5555    #블루스택 번호_정의
+deviceport = 0
+deviceport_0 = 5555    #블루스택 번호_정의
+deviceport_1 = 5557
+deviceport_2 = 5559
+deviceport_3 = 5561
+deviceport_4 = 5563
+deviceport_5 = 5565
+deviceport_6 = 5567
+deviceport_7 = 5569
 target_x = 1469      #몬스터 선택 x,y중간값 좌표
 target_y = 624
 common_x = 1354
@@ -79,11 +87,27 @@ def check_monster():
         combo4()
 
 #adb 설정
+div_num = int(input("창 번호 입력 : "))
+if div_num == 0:
+    deviceport = deviceport_0
+elif div_num == 1:
+    deviceport = deviceport_1
+elif div_num == 2:
+    deviceport = deviceport_2
+elif div_num == 3:
+    deviceport = deviceport_3
+elif div_num == 4:
+    deviceport = deviceport_4
+elif div_num == 5:
+    deviceport = deviceport_5
+elif div_num == 6:
+    deviceport = deviceport_6
+elif div_num == 7:
+    deviceport = deviceport_7
+print(deviceport)
 client = AdbClient(host="127.0.0.1", port=5037)
 client.remote_connect("localhost", int(deviceport))
 adbdevice = client.device("localhost:"+str(deviceport))
-client.remote_connect("localhost", int(5557))
-adbdevice = client.device("localhost:"+str(5557))
 
 if adbdevice is not None:
     print("Adb detected")
@@ -99,7 +123,6 @@ while True:
         for i in range(5):
             for i in range(20):
                 input_swipe(223,728,234,185)
-
             random_click(target_x, target_y, 0)
             check_monster()
             input_swipe(970, 330, 620, 330)
